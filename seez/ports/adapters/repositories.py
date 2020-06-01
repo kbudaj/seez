@@ -1,5 +1,4 @@
-from typing import List, Optional
-from uuid import UUID
+from typing import List
 
 from haps import Inject, egg
 
@@ -36,6 +35,9 @@ class SqlAlchemyCarRepository(CarRepository):
         self.session.add(car)
         self.session.flush()
 
+    def add_batch(self, cars: List[Car]) -> None:
+        self.session.bulk_save_objects(cars)
+
 
 @egg
 class SqlAlchemyMakeRepository(MakeRepository):
@@ -51,6 +53,9 @@ class SqlAlchemyMakeRepository(MakeRepository):
     def add(self, make: Make) -> None:
         self.session.add(make)
         self.session.flush()
+
+    def add_batch(self, makes: List[Make]) -> None:
+        self.session.bulk_save_objects(makes)
 
 
 @egg
@@ -68,6 +73,9 @@ class SqlAlchemyModelRepository(ModelRepository):
         self.session.add(model)
         self.session.flush()
 
+    def add_batch(self, models: List[Model]) -> None:
+        self.session.bulk_save_objects(models)
+
 
 @egg
 class SqlAlchemySubModelRepository(SubModelRepository):
@@ -83,3 +91,6 @@ class SqlAlchemySubModelRepository(SubModelRepository):
     def add(self, submodel: SubModel) -> None:
         self.session.add(submodel)
         self.session.flush()
+
+    def add_batch(self, submodels: List[SubModel]) -> None:
+        self.session.bulk_save_objects(submodels)

@@ -39,6 +39,14 @@ class TestCarRepository:
         car_repository.add(car_2)
         assert_that(car_repository.get_all()).contains_only(car_1, car_2)
 
+    def test_add_batch(self, car_factory, car_repository, submodel_factory):
+        submodel = submodel_factory()
+        cars = car_factory.build_batch(5, submodel_pk=submodel.pk)
+        assert_that(car_repository.get_all()).is_length(0)
+
+        car_repository.add_batch(cars)
+        assert_that(car_repository.get_all()).contains_only(*cars)
+
 
 @pytest.mark.postgres_db
 class TestModelsRepository:
@@ -68,6 +76,14 @@ class TestModelsRepository:
         assert_that(model_repository.get_all()).contains_only(model_1)
         model_repository.add(model_2)
         assert_that(model_repository.get_all()).contains_only(model_1, model_2)
+
+    def test_add_batch(self, model_factory, model_repository, make_factory):
+        make = make_factory()
+        models = model_factory.build_batch(5, make_pk=make.pk)
+        assert_that(model_repository.get_all()).is_length(0)
+
+        model_repository.add_batch(models)
+        assert_that(model_repository.get_all()).contains_only(*models)
 
 
 @pytest.mark.postgres_db
@@ -99,6 +115,14 @@ class TestSubModelsRepository:
         submodel_repository.add(submodel_2)
         assert_that(submodel_repository.get_all()).contains_only(submodel_1, submodel_2)
 
+    def test_add_batch(self, model_factory, submodel_repository, submodel_factory):
+        model = model_factory()
+        submodels = submodel_factory.build_batch(5, model_pk=model.pk)
+        assert_that(submodel_repository.get_all()).is_length(0)
+
+        submodel_repository.add_batch(submodels)
+        assert_that(submodel_repository.get_all()).contains_only(*submodels)
+
 
 @pytest.mark.postgres_db
 class TestMakeRepository:
@@ -127,3 +151,10 @@ class TestMakeRepository:
         assert_that(make_repository.get_all()).contains_only(make_1)
         make_repository.add(make_2)
         assert_that(make_repository.get_all()).contains_only(make_1, make_2)
+
+    def test_add_batch(self, make_factory, make_repository):
+        makes = make_factory.build_batch(5)
+        assert_that(make_repository.get_all()).is_length(0)
+
+        make_repository.add_batch(makes)
+        assert_that(make_repository.get_all()).contains_only(*makes)

@@ -45,6 +45,10 @@ class CarRepository(Repository):
     def add(self, car: Car) -> None:
         pass
 
+    @abstractmethod
+    def add_batch(self, cars: List[Car]) -> None:
+        pass
+
 
 @base
 class MakeRepository(Repository):
@@ -58,6 +62,10 @@ class MakeRepository(Repository):
 
     @abstractmethod
     def add(self, make: Make) -> None:
+        pass
+
+    @abstractmethod
+    def add_batch(self, makes: List[Make]) -> None:
         pass
 
 
@@ -75,6 +83,10 @@ class ModelRepository(Repository):
     def add(self, model: Model) -> None:
         pass
 
+    @abstractmethod
+    def add_batch(self, models: List[Model]) -> None:
+        pass
+
 
 @base
 class SubModelRepository(Repository):
@@ -88,4 +100,8 @@ class SubModelRepository(Repository):
 
     @abstractmethod
     def add(self, submodel: SubModel) -> None:
+        pass
+
+    @abstractmethod
+    def add_batch(self, submodels: List[SubModel]) -> None:
         pass

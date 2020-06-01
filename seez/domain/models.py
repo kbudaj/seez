@@ -149,6 +149,16 @@ class Make(AggregateRoot):
     def next_pk(cls) -> MakePk:
         return MakePk(uuid4())
 
+    @classmethod
+    def create_new(cls, name: MakeName) -> "Make":
+        return cls(
+            pk=cls.next_pk(),
+            name=name,
+            active=True,
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow(),
+        )
+
 
 @dataclass(unsafe_hash=False, eq=False)
 class Model(AggregateRoot):

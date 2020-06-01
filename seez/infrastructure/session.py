@@ -1,6 +1,8 @@
-from typing import cast
+from functools import wraps
+from typing import Any, cast
 
-from haps import base, egg, inject, scope
+from haps import Container, base, egg, inject, scope
+from scopectx import NotInContextException
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm import Session as SqlSession
 from sqlalchemy.orm import sessionmaker as SqlSessionMaker
@@ -33,3 +35,24 @@ def sql_alchemy_session_maker() -> SessionMaker:
 @inject
 def sql_alchemy_session_factory(session_maker: SessionMaker) -> Session:
     return cast(Session, session_maker())
+
+
+def transactional(func: Any) -> Any:
+    @wraps(func)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        transactional_scope = Container().scopes[TRANSACTIONAL_SCOPE]  # noqa
+
+        with transactional_scope.scope:
+            session = Container().get_object(Session)
+
+            try:
+                ret = func(*args, **kwargs)
+                session.commit()
+                session.close()
+            except Exception:
+                session.close()
+                raise
+            else:
+                return ret
+
+    return wrapper

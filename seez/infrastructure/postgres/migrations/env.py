@@ -1,16 +1,17 @@
 from logging.config import fileConfig
 
 from alembic import context
+from haps.exceptions import AlreadyConfigured
 from sqlalchemy import engine_from_config, pool
 
+from seez import settings
+from seez.infrastructure.postgres import METADATA
 from seez.main import configure_haps
-from seez.ports.adapters.postgres import METADATA
-from seez.settings import DATABASE_URL
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-db_url = DATABASE_URL
+db_url = settings.DATABASE_URL
 if db_url:
     config.set_main_option("sqlalchemy.url", db_url)
 
@@ -18,14 +19,12 @@ if db_url:
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
 target_metadata = METADATA
 
-if not target_metadata.tables:
+try:
     configure_haps()
+except AlreadyConfigured:
+    pass
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
