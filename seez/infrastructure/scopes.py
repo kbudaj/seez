@@ -1,9 +1,7 @@
-from typing import Any, Dict, Type, cast
+from typing import Any, Dict
 
 from haps.scopes import Scope
 from scopectx import Context, NotInContextException
-
-from seez.aliases import T
 
 TRANSACTIONAL_SCOPE = "__transactional"
 THREAD_SCOPE = "__thread"
