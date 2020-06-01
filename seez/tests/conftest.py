@@ -8,6 +8,7 @@ from pytest_factoryboy import register
 from seez.infrastructure.scopes import TestTransactionalScope
 from seez.main import configure_haps
 from seez.tests.fixtures.database import *
+from seez.tests.fixtures.repositories import *
 
 
 def pytest_addoption(parser: Any) -> None:
