@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import Boolean, Column, DateTime, Enum, ForeignKey, Integer, Table, Text
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import mapper
+from sqlalchemy.orm import mapper, relationship
 
 from seez.domain.models import Car, Make, Model, SubModel
 from seez.infrastructure.postgres import METADATA
@@ -64,7 +64,7 @@ SUBMODEL_TABLE = Table(
     Column("updated_at", DateTime, nullable=False, default=datetime.utcnow),
 )
 
-mapper(Car, CAR_TABLE)
+mapper(Car, CAR_TABLE, properties={"_submodel": relationship(SubModel)})
 mapper(Make, MAKE_TABLE)
-mapper(Model, MODEL_TABLE)
-mapper(SubModel, SUBMODEL_TABLE)
+mapper(Model, MODEL_TABLE, properties={"_make": relationship(Make)})
+mapper(SubModel, SUBMODEL_TABLE, properties={"_model": relationship(Model)})

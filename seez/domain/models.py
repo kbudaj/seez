@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Optional
@@ -36,6 +36,7 @@ class Car(AggregateRoot):
     _body_type: Optional["Car.BodyType"]
     _transmission: Optional["Car.Transmission"]
     _fuel_type: Optional["Car.FuelType"]
+    _submodel: "SubModel"
 
     class BodyType(Enum):
         COUPE = "COUPE"
@@ -123,6 +124,18 @@ class Car(AggregateRoot):
     def fuel_type(self) -> Optional["Car.FuelType"]:
         return self._fuel_type
 
+    @property
+    def submodel_name(self) -> "SubModelName":
+        return self._submodel.name
+
+    @property
+    def model_name(self) -> "ModelName":
+        return self._submodel.model.name
+
+    @property
+    def make_name(self) -> "MakeName":
+        return self._submodel.model.make.name
+
 
 @dataclass(unsafe_hash=False, eq=False)
 class Make(AggregateRoot):
@@ -146,9 +159,31 @@ class Model(AggregateRoot):
     created_at: datetime
     updated_at: datetime
 
+    _make: Make
+
+    def __init__(
+        self,
+        pk: ModelPk,
+        name: ModelName,
+        active: bool,
+        make_pk: MakePk,
+        created_at: datetime,
+        updated_at: datetime,
+    ) -> None:
+        self.pk = pk
+        self.name = name
+        self.active = active
+        self.make_pk = make_pk
+        self.created_at = created_at
+        self.updated_at = updated_at
+
     @classmethod
     def next_pk(cls) -> ModelPk:
         return ModelPk(uuid4())
+
+    @property
+    def make(self) -> Make:
+        return self._make
 
 
 @dataclass(unsafe_hash=False, eq=False)
@@ -160,6 +195,28 @@ class SubModel(AggregateRoot):
     created_at: datetime
     updated_at: datetime
 
+    _model: Model
+
+    def __init__(
+        self,
+        pk: SubModelPk,
+        name: SubModelName,
+        active: bool,
+        model_pk: ModelPk,
+        created_at: datetime,
+        updated_at: datetime,
+    ) -> None:
+        self.pk = pk
+        self.name = name
+        self.active = active
+        self.model_pk = model_pk
+        self.created_at = created_at
+        self.updated_at = updated_at
+
     @classmethod
     def next_pk(cls) -> SubModelPk:
         return SubModelPk(uuid4())
+
+    @property
+    def model(self) -> Model:
+        return self._model
