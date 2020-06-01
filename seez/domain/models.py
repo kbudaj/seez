@@ -1,8 +1,8 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from typing import Optional
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 from seez.aliases import (
     CarPk,
@@ -25,7 +25,7 @@ class Car(AggregateRoot):
     pk: CarPk
     active: bool
     year: Year
-    mileage: Mileage
+    mileage: Optional[Mileage]
     price: Optional[Price]
     exterior_color: Optional[Color]
     created_at: datetime
@@ -44,6 +44,11 @@ class Car(AggregateRoot):
         SUV = "SUV"
         HATCHBACK = "HATCHBACK"
         CONVERTIBLE = "CONVERTIBLE"
+        VAN = "VAN"
+        SPORTS = "SPORTS"
+        TRUCK = "TRUCK"
+        WAGON = "WAGON"
+        LUXURY = "LUXURY"
 
     class Transmission(Enum):
         AUTOMATIC = "AUTOMATIC"
@@ -52,6 +57,8 @@ class Car(AggregateRoot):
     class FuelType(Enum):
         PETROL = "PETROL"
         HYBRID = "HYBRID"
+        DIESEL = "DIESEL"
+        ELECTRICITY = "ELECTRICITY"
 
     def __init__(
         self,

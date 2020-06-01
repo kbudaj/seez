@@ -7,8 +7,8 @@ from pytest_factoryboy import register
 
 from seez.infrastructure.scopes import TestTransactionalScope
 from seez.main import configure_haps
-from seez.tests.fixtures.database import *
-from seez.tests.fixtures.repositories import *
+from seez.tests.fixtures.database import *  # noqa
+from seez.tests.fixtures.repositories import *  # noqa
 
 
 def pytest_addoption(parser: Any) -> None:

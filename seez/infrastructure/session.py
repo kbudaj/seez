@@ -2,7 +2,6 @@ from functools import wraps
 from typing import Any, cast
 
 from haps import Container, base, egg, inject, scope
-from scopectx import NotInContextException
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm import Session as SqlSession
 from sqlalchemy.orm import sessionmaker as SqlSessionMaker

@@ -1,8 +1,8 @@
-"""Basic models
+"""car, make, model, submodel
 
-Revision ID: dffd6836dd2b
-Revises: 
-Create Date: 2020-06-01 15:13:19.462983
+Revision ID: 96d15556b9a4
+Revises:
+Create Date: 2020-06-01 19:10:22.509669
 
 """
 import sqlalchemy as sa
@@ -10,7 +10,7 @@ from alembic import op
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = "dffd6836dd2b"
+revision = "96d15556b9a4"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -57,7 +57,7 @@ def upgrade():
         sa.Column("pk", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("active", sa.Boolean(), nullable=False),
         sa.Column("year", sa.Integer(), nullable=False),
-        sa.Column("mileage", sa.Integer(), nullable=False),
+        sa.Column("mileage", sa.Integer(), nullable=True),
         sa.Column("price", sa.Integer(), nullable=True),
         sa.Column("exterior_color", sa.Text(), nullable=True),
         sa.Column("created_at", sa.DateTime(), nullable=False),
@@ -65,7 +65,19 @@ def upgrade():
         sa.Column("submodel_pk", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column(
             "body_type",
-            sa.Enum("COUPE", "SEDAN", "SUV", "HATCHBACK", "CONVERTIBLE", name="bodytype"),
+            sa.Enum(
+                "COUPE",
+                "SEDAN",
+                "SUV",
+                "HATCHBACK",
+                "CONVERTIBLE",
+                "VAN",
+                "SPORTS",
+                "TRUCK",
+                "WAGON",
+                "LUXURY",
+                name="bodytype",
+            ),
             nullable=True,
         ),
         sa.Column(
@@ -74,7 +86,9 @@ def upgrade():
             nullable=True,
         ),
         sa.Column(
-            "fuel_type", sa.Enum("PETROL", "HYBRID", name="fueltype"), nullable=True
+            "fuel_type",
+            sa.Enum("PETROL", "HYBRID", "DIESEL", "ELECTRICITY", name="fueltype"),
+            nullable=True,
         ),
         sa.ForeignKeyConstraint(["submodel_pk"], ["submodel.pk"],),
         sa.PrimaryKeyConstraint("pk"),

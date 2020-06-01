@@ -1,0 +1,3 @@
+id,active,year,mileage,price,make_id,model_id,submodel_id,body_type,transmission,fuel_type,exterior_color,created_at,updated_at
+f3444125ea1c170719a0667a11eff46e,t,2016,54089,35902,nissan,697,35,Hatchback,Automatic,Petrol,White,2018-11-28 00:07:55.609081+01,2019-08-16 04:09:56.073615+02
+cf5526c705a534282a973f0d2d018885,f,2015,76000,55000,honda,342,128,Sedan,Manual,,White,2018-06-30 11:16:59+02,2019-08-15 02:02:41.012484+02

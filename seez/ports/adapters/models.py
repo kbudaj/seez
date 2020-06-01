@@ -13,7 +13,7 @@ CAR_TABLE = Table(
     Column("pk", UUID(as_uuid=True), primary_key=True),
     Column("active", Boolean, nullable=False, default=True, index=True),
     Column("year", Integer, nullable=False),
-    Column("mileage", Integer, nullable=False),
+    Column("mileage", Integer, nullable=True),
     Column("price", Integer, nullable=True),
     Column("exterior_color", Text, nullable=True),
     Column("created_at", DateTime, nullable=False, default=datetime.utcnow),

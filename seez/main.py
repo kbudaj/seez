@@ -10,8 +10,6 @@ from seez.infrastructure.scopes import (
 
 
 def configure_haps(transactional_scope: Scope = TransactionalScope) -> None:
-    Container.autodiscover(
-        ["seez",]
-    )
+    Container.autodiscover(["seez.ports", "seez.infrastructure"])
     Container().register_scope(TRANSACTIONAL_SCOPE, transactional_scope)
     Container().register_scope(THREAD_SCOPE, ThreadScope)
