@@ -2,7 +2,8 @@ from typing import cast
 
 from haps import base, egg, inject, scope
 from sqlalchemy.engine import create_engine
-from sqlalchemy.orm import Session as SqlSession, sessionmaker as SqlSessionMaker
+from sqlalchemy.orm import Session as SqlSession
+from sqlalchemy.orm import sessionmaker as SqlSessionMaker
 
 from seez import settings
 from seez.infrastructure.scopes import THREAD_SCOPE, TRANSACTIONAL_SCOPE

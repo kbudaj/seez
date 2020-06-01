@@ -1,12 +1,20 @@
 import importlib
 import os
-from typing import List
+from typing import Any, List
 
 import pytest
 from pytest_factoryboy import register
 
 from seez.infrastructure.scopes import TestTransactionalScope
 from seez.main import configure_haps
+from seez.tests.fixtures.database import *
+
+
+def pytest_addoption(parser: Any) -> None:
+    parser.addoption(
+        "--run-migrations", action="store_true", dest="run_migrations", default=False
+    )
+
 
 FACTORY_MODULES = ("seez.tests.factories.seez",)
 
