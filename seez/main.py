@@ -1,13 +1,13 @@
-from fastapi import FastAPI
+from haps import Container
+from haps.scopes import Scope
+from haps.scopes.thread import ThreadScope
 
-app = FastAPI()
-
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+from seez.infrastructure.scopes import THREAD_SCOPE, TRANSACTIONAL_SCOPE, TransactionalScope
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str = None):
-    return {"item_id": item_id, "q": q}
+def configure_haps(transactional_scope: Scope = TransactionalScope) -> None:
+    Container.autodiscover(
+        ["seez.ports",]
+    )
+    Container().register_scope(TRANSACTIONAL_SCOPE, transactional_scope)
+    Container().register_scope(THREAD_SCOPE, ThreadScope)
