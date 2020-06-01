@@ -5,7 +5,6 @@ from sqlalchemy.engine import create_engine
 from sqlalchemy.orm import Session as SqlSession, sessionmaker as SqlSessionMaker
 
 from seez import settings
-
 from seez.infrastructure.scopes import THREAD_SCOPE, TRANSACTIONAL_SCOPE
 
 

@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from uuid import uuid4
 
 from seez.aliases import CarPk
-
 from seez.infrastructure.models import AggregateRoot
 
 

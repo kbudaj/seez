@@ -1,24 +1,22 @@
 from abc import ABC, abstractmethod
-from typing import Generic, List, Optional
-
-from seez.aliases import T, TEntity
+from typing import Any, List, Optional
 
 
-class ReadOnlyRepository(ABC, Generic[T, TEntity]):
+class ReadOnlyRepository(ABC):
     """Generic Read Only Repository"""
 
     @abstractmethod
-    def get_by_pk(self, pk: T) -> Optional[TEntity]:
+    def get_by_pk(self, pk: Any) -> Optional[Any]:
         pass
 
     @abstractmethod
-    def get_all(self) -> List[TEntity]:
+    def get_all(self) -> List[Any]:
         pass
 
 
-class Repository(ReadOnlyRepository[T, TEntity]):
+class Repository(ReadOnlyRepository):
     """Generic Repository Interface"""
 
     @abstractmethod
-    def add(self, entity: TEntity) -> None:
+    def add(self, entity: Any) -> None:
         pass

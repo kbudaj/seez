@@ -12,9 +12,9 @@ THREAD_SCOPE = "__thread"
 class TransactionalScope(Scope):
     scope = Context()
 
-    def get_object(self, class_: Type[T]) -> T:
+    def get_object(self, class_: Any) -> Any:
         try:
-            return cast(T, self.scope[class_])
+            return self.scope[class_]
         except KeyError:
             obj = class_()
             self.scope[class_] = obj
@@ -25,9 +25,9 @@ class TestTransactionalScope(Scope):
     scope = Context()
     objects: Dict[Any, Any] = {}
 
-    def get_object(self, class_: Type[T]) -> T:
+    def get_object(self, class_: Any) -> Any:
         try:
-            return cast(T, self.scope[class_])
+            return self.scope[class_]
         except KeyError:
             obj = class_()
             self.scope[class_] = obj
@@ -36,7 +36,7 @@ class TestTransactionalScope(Scope):
             if class_ not in self.objects:
                 self.objects[class_] = class_()
 
-            return cast(T, self.objects[class_])
+            return self.objects[class_]
 
     @classmethod
     def reset(cls) -> None:

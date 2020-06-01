@@ -1,13 +1,11 @@
 from logging.config import fileConfig
 
+from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from alembic import context
-
 from seez.main import configure_haps
-from seez.settings import DATABASE_URL
-
 from seez.ports.adapters.postgres import METADATA
+from seez.settings import DATABASE_URL
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

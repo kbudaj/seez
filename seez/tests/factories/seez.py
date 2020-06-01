@@ -1,8 +1,7 @@
 import factory
 
-from seez.tests.factories import SQLAlchemyBase
-
 from seez.domain.models import Car
+from seez.tests.factories import SQLAlchemyBase
 
 
 class CarFactory(SQLAlchemyBase):

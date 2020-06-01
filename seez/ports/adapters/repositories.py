@@ -3,10 +3,9 @@ from uuid import UUID
 
 from haps import Inject, egg
 
-from seez.infrastructure.session import Session
-
 from seez.domain.models import Car
-from seez.domain.repositories import CarRepository
+from seez.infrastructure.session import Session
+from seez.ports.repositories import CarRepository
 
 
 @egg

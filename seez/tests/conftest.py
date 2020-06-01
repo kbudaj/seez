@@ -5,9 +5,8 @@ from typing import List
 import pytest
 from pytest_factoryboy import register
 
-from seez.main import configure_haps
-
 from seez.infrastructure.scopes import TestTransactionalScope
+from seez.main import configure_haps
 
 FACTORY_MODULES = ("seez.tests.factories.seez",)
 

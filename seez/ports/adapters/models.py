@@ -2,9 +2,8 @@ from sqlalchemy import Column, Table, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import mapper
 
-from seez.ports.adapters.postgres import METADATA
-
 from seez.domain.models import Car
+from seez.ports.adapters.postgres import METADATA
 
 CAR_TABLE = Table(
     "car",

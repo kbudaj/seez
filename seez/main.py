@@ -2,7 +2,11 @@ from haps import Container
 from haps.scopes import Scope
 from haps.scopes.thread import ThreadScope
 
-from seez.infrastructure.scopes import THREAD_SCOPE, TRANSACTIONAL_SCOPE, TransactionalScope
+from seez.infrastructure.scopes import (
+    THREAD_SCOPE,
+    TRANSACTIONAL_SCOPE,
+    TransactionalScope,
+)
 
 
 def configure_haps(transactional_scope: Scope = TransactionalScope) -> None:

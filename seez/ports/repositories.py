@@ -3,13 +3,12 @@ from typing import List, Optional
 
 from haps import base
 
-from seez.infrastructure.repositories import Repository
-
 from seez.domain.models import Car, CarPk
+from seez.infrastructure.repositories import Repository
 
 
 @base
-class CarRepository(Repository[CarPk, Car]):
+class CarRepository(Repository):
     @abstractmethod
     def get_by_pk(self, pk: CarPk) -> Optional[Car]:
         pass
