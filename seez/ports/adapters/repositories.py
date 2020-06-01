@@ -1,6 +1,8 @@
-from typing import List
+from typing import List, cast
 
 from haps import Inject, egg
+from sqlalchemy import desc
+from sqlalchemy_filters import apply_pagination
 
 from seez.aliases import CarPk, MakePk, ModelPk, SubModelPk
 from seez.domain.exceptions import (
@@ -31,6 +33,17 @@ class SqlAlchemyCarRepository(CarRepository):
     def get_all(self) -> List[Car]:
         return list(self.session.query(Car).all())
 
+    def get_active_paged(self, page_number: int = 1, page_size: int = 20) -> List[Car]:
+        active_cars_q = (
+            self.session.query(Car)
+            .filter(Car.active == True)  # noqa
+            .order_by(desc(Car.updated_at))
+        )
+        query, pagination = apply_pagination(
+            active_cars_q, page_number=page_number, page_size=page_size
+        )
+        return cast(List[Car], query.all())
+
     def add(self, car: Car) -> None:
         self.session.add(car)
         self.session.flush()
@@ -49,6 +62,9 @@ class SqlAlchemyMakeRepository(MakeRepository):
 
     def get_all(self) -> List[Make]:
         return list(self.session.query(Make).all())
+
+    def get_all_active(self) -> List[Make]:
+        return list(self.session.query(Make).filter(Make.active == True).all())  # noqa
 
     def add(self, make: Make) -> None:
         self.session.add(make)
@@ -69,6 +85,9 @@ class SqlAlchemyModelRepository(ModelRepository):
     def get_all(self) -> List[Model]:
         return list(self.session.query(Model).all())
 
+    def get_all_active(self) -> List[Model]:
+        return list(self.session.query(Model).filter(Model.active == True).all())  # noqa
+
     def add(self, model: Model) -> None:
         self.session.add(model)
         self.session.flush()
@@ -87,6 +106,11 @@ class SqlAlchemySubModelRepository(SubModelRepository):
 
     def get_all(self) -> List[SubModel]:
         return list(self.session.query(SubModel).all())
+
+    def get_all_active(self) -> List[SubModel]:
+        return list(
+            self.session.query(SubModel).filter(SubModel.active == True).all()  # noqa
+        )
 
     def add(self, submodel: SubModel) -> None:
         self.session.add(submodel)

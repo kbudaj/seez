@@ -42,6 +42,10 @@ class CarRepository(Repository):
         pass
 
     @abstractmethod
+    def get_active_paged(self, page_number: int) -> List[Car]:
+        pass
+
+    @abstractmethod
     def add(self, car: Car) -> None:
         pass
 
@@ -58,6 +62,10 @@ class MakeRepository(Repository):
 
     @abstractmethod
     def get_all(self) -> List[Make]:
+        pass
+
+    @abstractmethod
+    def get_all_active(self) -> List[Make]:
         pass
 
     @abstractmethod
@@ -80,6 +88,10 @@ class ModelRepository(Repository):
         pass
 
     @abstractmethod
+    def get_all_active(self) -> List[Model]:
+        pass
+
+    @abstractmethod
     def add(self, model: Model) -> None:
         pass
 
@@ -96,6 +108,10 @@ class SubModelRepository(Repository):
 
     @abstractmethod
     def get_all(self) -> List[SubModel]:
+        pass
+
+    @abstractmethod
+    def get_all_active(self) -> List[SubModel]:
         pass
 
     @abstractmethod

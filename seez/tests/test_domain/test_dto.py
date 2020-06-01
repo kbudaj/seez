@@ -101,36 +101,40 @@ class TestCarListDTO:
         )
         cars = [car_1, car_2]
         dto = CarListDTO.from_model(cars)
-        expected = [
-            {
-                "pk": "b69e3c8c-0ea7-40f9-8141-9f5496523a85",
-                "year": 2020,
-                "mileage": 2000,
-                "price": 100000,
-                "exterior_color": "White",
-                "created_at": "2020-06-01T20:00:00",
-                "updated_at": "2020-06-01T20:00:00",
-                "body_type": "SUV",
-                "transmission": "AUTOMATIC",
-                "fuel_type": "PETROL",
-                "submodel": "CSL200",
-                "model": "CSL",
-                "make": "Mercedes",
-            },
-            {
-                "pk": "bb04a84d-e3c2-4c63-8dd3-9b1401eae8ae",
-                "year": 2010,
-                "mileage": 30000,
-                "price": 30000,
-                "exterior_color": "Black",
-                "created_at": "2020-06-01T20:00:00",
-                "updated_at": "2020-06-01T20:00:00",
-                "body_type": "SUV",
-                "transmission": "AUTOMATIC",
-                "fuel_type": "PETROL",
-                "submodel": "CSL200",
-                "model": "CSL",
-                "make": "Mercedes",
-            },
-        ]
+
+        expected = {
+            "values": [
+                {
+                    "pk": "b69e3c8c-0ea7-40f9-8141-9f5496523a85",
+                    "year": 2020,
+                    "mileage": 2000,
+                    "price": 100000,
+                    "exterior_color": "White",
+                    "created_at": "2020-06-01T20:00:00",
+                    "updated_at": "2020-06-01T20:00:00",
+                    "body_type": "SUV",
+                    "transmission": "AUTOMATIC",
+                    "fuel_type": "PETROL",
+                    "submodel": "CSL200",
+                    "model": "CSL",
+                    "make": "Mercedes",
+                },
+                {
+                    "pk": "bb04a84d-e3c2-4c63-8dd3-9b1401eae8ae",
+                    "year": 2010,
+                    "mileage": 30000,
+                    "price": 30000,
+                    "exterior_color": "Black",
+                    "created_at": "2020-06-01T20:00:00",
+                    "updated_at": "2020-06-01T20:00:00",
+                    "body_type": "SUV",
+                    "transmission": "AUTOMATIC",
+                    "fuel_type": "PETROL",
+                    "submodel": "CSL200",
+                    "model": "CSL",
+                    "make": "Mercedes",
+                },
+            ]
+        }
+
         assert_that(dto.json()).is_equal_to(json.dumps(expected))

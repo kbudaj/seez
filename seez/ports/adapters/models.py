@@ -59,7 +59,9 @@ SUBMODEL_TABLE = Table(
     Column("pk", UUID(as_uuid=True), primary_key=True),
     Column("name", Text, nullable=True),
     Column("active", Boolean, nullable=False, default=True),
-    Column("model_pk", UUID(as_uuid=True), ForeignKey("model.pk"), nullable=False),
+    Column(
+        "model_pk", UUID(as_uuid=True), ForeignKey("model.pk"), nullable=False, index=True
+    ),
     Column("created_at", DateTime, nullable=False, default=datetime.utcnow),
     Column("updated_at", DateTime, nullable=False, default=datetime.utcnow),
 )

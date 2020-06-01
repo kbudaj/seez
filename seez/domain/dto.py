@@ -5,13 +5,16 @@ from seez.aliases import (
     CarPk,
     Color,
     MakeName,
+    MakePk,
     Mileage,
     ModelName,
+    ModelPk,
     Price,
     SubModelName,
+    SubModelPk,
     Year,
 )
-from seez.domain.models import Car
+from seez.domain.models import Car, Make, Model, SubModel
 from seez.infrastructure.dto import DTO
 
 
@@ -50,11 +53,98 @@ class CarDTO(DTO):
 
 
 class CarListDTO(DTO):
-    __root__: List[CarDTO]
+    values: List[CarDTO]
 
     @classmethod
     def from_model(cls, cars: List[Car]) -> "CarListDTO":
         car_dtos = []
         for car in cars:
             car_dtos.append(CarDTO.from_model(car))
-        return cls(__root__=car_dtos)
+        return cls(values=car_dtos)
+
+
+class MakeDTO(DTO):
+    pk: MakePk
+    name: MakeName
+    created_at: datetime
+    updated_at: datetime
+
+    @classmethod
+    def from_model(cls, make: Make) -> "MakeDTO":
+        return cls(
+            pk=make.pk,
+            name=make.name,
+            created_at=make.created_at,
+            updated_at=make.updated_at,
+        )
+
+
+class MakeListDTO(DTO):
+    values: List[MakeDTO]
+
+    @classmethod
+    def from_model(cls, makes: List[MakeDTO]) -> "MakeListDTO":
+        make_dtos = []
+        for make in makes:
+            make_dtos.append(MakeDTO.from_model(make))
+        return cls(values=make_dtos)
+
+
+class ModelDTO(DTO):
+    pk: ModelPk
+    name: ModelName
+    make: MakeName
+    created_at: datetime
+    updated_at: datetime
+
+    @classmethod
+    def from_model(cls, model: Model) -> "ModelDTO":
+        return cls(
+            pk=model.pk,
+            name=model.name,
+            make=model.make.name,
+            created_at=model.created_at,
+            updated_at=model.updated_at,
+        )
+
+
+class ModelListDTO(DTO):
+    values: List[ModelDTO]
+
+    @classmethod
+    def from_model(cls, models: List[Model]) -> "ModelListDTO":
+        model_dtos = []
+        for model in models:
+            model_dtos.append(ModelDTO.from_model(model))
+        return cls(values=model_dtos)
+
+
+class SubModelDTO(DTO):
+    pk: SubModelPk
+    name: SubModelName
+    make: MakeName
+    model: ModelName
+    created_at: datetime
+    updated_at: datetime
+
+    @classmethod
+    def from_model(cls, submodel: SubModel) -> "SubModelDTO":
+        return cls(
+            pk=submodel.pk,
+            name=submodel.name,
+            make=submodel.model.make.name,
+            model=submodel.model.name,
+            created_at=submodel.created_at,
+            updated_at=submodel.updated_at,
+        )
+
+
+class SubModelListDTO(DTO):
+    values: List[SubModelDTO]
+
+    @classmethod
+    def from_model(cls, submodels: List[SubModel]) -> "SubModelListDTO":
+        submodel_dtos = []
+        for submodel in submodels:
+            submodel_dtos.append(SubModelDTO.from_model(submodel))
+        return cls(values=submodel_dtos)

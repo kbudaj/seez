@@ -1,8 +1,8 @@
 """car, make, model, submodel
 
-Revision ID: 96d15556b9a4
+Revision ID: 980cff00c994
 Revises:
-Create Date: 2020-06-01 19:10:22.509669
+Create Date: 2020-06-01 21:40:28.275265
 
 """
 import sqlalchemy as sa
@@ -10,7 +10,7 @@ from alembic import op
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = "96d15556b9a4"
+revision = "980cff00c994"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -52,6 +52,7 @@ def upgrade():
         sa.ForeignKeyConstraint(["model_pk"], ["model.pk"],),
         sa.PrimaryKeyConstraint("pk"),
     )
+    op.create_index(op.f("ix_submodel_model_pk"), "submodel", ["model_pk"], unique=False)
     op.create_table(
         "car",
         sa.Column("pk", postgresql.UUID(as_uuid=True), nullable=False),
@@ -103,6 +104,7 @@ def downgrade():
     op.drop_index(op.f("ix_car_submodel_pk"), table_name="car")
     op.drop_index(op.f("ix_car_active"), table_name="car")
     op.drop_table("car")
+    op.drop_index(op.f("ix_submodel_model_pk"), table_name="submodel")
     op.drop_table("submodel")
     op.drop_index(op.f("ix_model_make_pk"), table_name="model")
     op.drop_index(op.f("ix_model_active"), table_name="model")

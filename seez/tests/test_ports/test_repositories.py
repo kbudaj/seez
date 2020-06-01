@@ -29,6 +29,18 @@ class TestCarRepository:
         result = car_repository.get_all()
         assert_that(result).contains_only(*cars)
 
+    def test_get_active_paged(self, car_factory, car_repository):
+        car_factory.create_batch(2, active=False)
+        car_factory.create_batch(12, active=True)
+        result_1 = car_repository.get_active_paged(page_number=1, page_size=5)
+        assert_that(result_1).is_length(5)
+        result_2 = car_repository.get_active_paged(page_number=2, page_size=5)
+        assert_that(result_2).is_length(5)
+        result_3 = car_repository.get_active_paged(page_number=3, page_size=5)
+        assert_that(result_3).is_length(2)
+        result_3 = car_repository.get_active_paged(page_number=4, page_size=5)
+        assert_that(result_3).is_length(0)
+
     def test_add(self, car_factory, car_repository, submodel_factory):
         submodel = submodel_factory()
         car_1, car_2 = car_factory.build_batch(2, submodel_pk=submodel.pk)
@@ -66,6 +78,15 @@ class TestModelsRepository:
 
         result = model_repository.get_all()
         assert_that(result).contains_only(*models)
+
+    def test_get_all_active(self, model_repository, model_factory):
+        assert_that(model_repository.get_all()).is_length(0)
+
+        model_factory.create_batch(2, active=False)
+        active_models = model_factory.create_batch(5, active=True)
+
+        result = model_repository.get_all_active()
+        assert_that(result).contains_only(*active_models)
 
     def test_add(self, model_factory, model_repository, make_factory):
         make = make_factory()
@@ -105,6 +126,15 @@ class TestSubModelsRepository:
         result = submodel_repository.get_all()
         assert_that(result).contains_only(*submodels)
 
+    def test_get_all_active(self, submodel_repository, submodel_factory):
+        assert_that(submodel_repository.get_all()).is_length(0)
+
+        submodel_factory.create_batch(2, active=False)
+        active_submodels = submodel_factory.create_batch(5, active=True)
+
+        result = submodel_repository.get_all_active()
+        assert_that(result).contains_only(*active_submodels)
+
     def test_add(self, model_factory, submodel_repository, submodel_factory):
         model = model_factory()
         submodel_1, submodel_2 = submodel_factory.build_batch(2, model_pk=model.pk)
@@ -142,6 +172,15 @@ class TestMakeRepository:
 
         result = make_repository.get_all()
         assert_that(result).contains_only(*makes)
+
+    def test_get_all_active(self, make_repository, make_factory):
+        assert_that(make_repository.get_all()).is_length(0)
+
+        make_factory.create_batch(2, active=False)
+        active_make = make_factory.create_batch(5, active=True)
+
+        result = make_repository.get_all_active()
+        assert_that(result).contains_only(*active_make)
 
     def test_add(self, make_factory, make_repository):
         make_1, make_2 = make_factory.build_batch(2)
