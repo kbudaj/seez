@@ -13,3 +13,4 @@ envparse==0.2.0
 psycopg2-binary==2.8.5
 returns==0.13.0
 alembic
+assertpy

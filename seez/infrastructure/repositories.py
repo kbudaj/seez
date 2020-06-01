@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
-from typing import Any, List, Optional
+from typing import Any, List
 
 
 class ReadOnlyRepository(ABC):
     """Generic Read Only Repository"""
 
     @abstractmethod
-    def get_by_pk(self, pk: Any) -> Optional[Any]:
+    def get_by_pk(self, pk: Any) -> Any:
         pass
 
     @abstractmethod
