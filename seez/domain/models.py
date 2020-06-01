@@ -50,15 +50,24 @@ class Car(AggregateRoot):
         WAGON = "WAGON"
         LUXURY = "LUXURY"
 
+        def __str__(self) -> str:
+            return self.name
+
     class Transmission(Enum):
         AUTOMATIC = "AUTOMATIC"
         MANUAL = "MANUAL"
+
+        def __str__(self) -> str:
+            return self.name
 
     class FuelType(Enum):
         PETROL = "PETROL"
         HYBRID = "HYBRID"
         DIESEL = "DIESEL"
         ELECTRICITY = "ELECTRICITY"
+
+        def __str__(self) -> str:
+            return self.name
 
     def __init__(
         self,
