@@ -38,7 +38,7 @@ class Car(AggregateRoot):
     _fuel_type: Optional["Car.FuelType"]
     _submodel: "SubModel"
 
-    class BodyType(Enum):
+    class BodyType(str, Enum):
         COUPE = "COUPE"
         SEDAN = "SEDAN"
         SUV = "SUV"
@@ -53,14 +53,14 @@ class Car(AggregateRoot):
         def __str__(self) -> str:
             return self.name
 
-    class Transmission(Enum):
+    class Transmission(str, Enum):
         AUTOMATIC = "AUTOMATIC"
         MANUAL = "MANUAL"
 
         def __str__(self) -> str:
             return self.name
 
-    class FuelType(Enum):
+    class FuelType(str, Enum):
         PETROL = "PETROL"
         HYBRID = "HYBRID"
         DIESEL = "DIESEL"
