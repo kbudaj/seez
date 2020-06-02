@@ -137,14 +137,13 @@ class SqlAlchemyModelRepository(ModelRepository):
     def get_all_active(self) -> List[Model]:
         return list(self.session.query(Model).filter(is_(Model.active, True)).all())
 
-    @does_not_exist_error(ModelDoesNotExist)
     def get_by_name_and_make(self, name: ModelName, make: MakeName) -> Model:
         return (
             self.session.query(Model)
             .join(Make, Model.make_pk == Make.pk)
             .filter(func.lower(Model.name) == func.lower(name))
             .filter(func.lower(Make.name) == func.lower(make))
-            .one()
+            .first()
         )
 
     def add(self, model: Model) -> None:
@@ -169,7 +168,6 @@ class SqlAlchemySubModelRepository(SubModelRepository):
     def get_all_active(self) -> List[SubModel]:
         return list(self.session.query(SubModel).filter(is_(SubModel.active, True)).all())
 
-    @does_not_exist_error(SubModelDoesNotExist)
     def get_by_name_model_and_make(
         self, name: SubModelName, make: MakeName, model: ModelName
     ) -> SubModel:
@@ -180,7 +178,7 @@ class SqlAlchemySubModelRepository(SubModelRepository):
             .filter(func.lower(SubModel.name) == func.lower(name))
             .filter(func.lower(Model.name) == func.lower(model))
             .filter(func.lower(Make.name) == func.lower(make))
-            .one()
+            .first()
         )
 
     def add(self, submodel: SubModel) -> None:

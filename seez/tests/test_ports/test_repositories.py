@@ -135,13 +135,13 @@ class TestModelsRepository:
         result = model_repository.get_by_name_and_make(name=model.name, make=make.name)
         assert_that(result).is_equal_to(model)
 
-    def test_get_by_name_and_make_error(
+    def test_get_by_name_and_make_none(
         self, model_factory, make_factory, model_repository
     ):
         make = make_factory(name="Mercedes")
         model_factory(name="CLS", make=make)
-        with pytest.raises(ModelDoesNotExist):
-            model_repository.get_by_name_and_make(name="CLA", make=make.name)
+        result = model_repository.get_by_name_and_make(name="CLA", make=make.name)
+        assert_that(result).is_none()
 
     def test_add(self, model_factory, model_repository, make_factory):
         make = make_factory()
@@ -207,10 +207,10 @@ class TestSubModelsRepository:
         make = make_factory(name="Mercedes")
         model = model_factory(name="CLS", make=make)
         submodel_factory(name="CLS200", model=model)
-        with pytest.raises(SubModelDoesNotExist):
-            submodel_repository.get_by_name_model_and_make(
-                "CLA500", make.name, model.name
-            )
+        res = submodel_repository.get_by_name_model_and_make(
+            "CLA500", make.name, model.name
+        )
+        assert_that(res).is_none()
 
     def test_add(self, model_factory, submodel_repository, submodel_factory):
         model = model_factory()

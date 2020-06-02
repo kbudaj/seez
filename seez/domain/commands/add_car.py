@@ -1,7 +1,6 @@
 from haps import Inject
 
 from seez.domain.dto import AddCarDTO
-from seez.domain.exceptions import ModelDoesNotExist, SubModelDoesNotExist
 from seez.domain.models import Car, Make, Model, SubModel
 from seez.infrastructure.command import BaseCommand
 from seez.infrastructure.session import transactional
@@ -24,15 +23,12 @@ class AddCar(BaseCommand):
     @transactional
     def handle(self) -> None:
         make = self.make_repository.get_by_name(self.add_car_dto.make)
-        try:
-            submodel = self.submodel_repository.get_by_name_model_and_make(
-                name=self.add_car_dto.submodel,
-                model=self.add_car_dto.model,
-                make=self.add_car_dto.make,
-            )
-        except SubModelDoesNotExist:
-            submodel = None
 
+        submodel = self.submodel_repository.get_by_name_model_and_make(
+            name=self.add_car_dto.submodel,
+            model=self.add_car_dto.model,
+            make=self.add_car_dto.make,
+        )
         if submodel is None:
             submodel = self._create_new_submodel(make)
 
@@ -49,12 +45,9 @@ class AddCar(BaseCommand):
         self.car_repository.add(car)
 
     def _create_new_submodel(self, make: Make) -> SubModel:
-        try:
-            model = self.model_repository.get_by_name_and_make(
-                name=self.add_car_dto.model, make=self.add_car_dto.make
-            )
-        except ModelDoesNotExist:
-            model = None
+        model = self.model_repository.get_by_name_and_make(
+            name=self.add_car_dto.model, make=self.add_car_dto.make
+        )
 
         if model is None:
             model = Model.create_new(name=self.add_car_dto.model, make_pk=make.pk)
