@@ -112,6 +112,10 @@ class ModelRepository(Repository):
         pass
 
     @abstractmethod
+    def get_by_name_and_make(self, name: ModelName, make: MakeName) -> Model:
+        pass
+
+    @abstractmethod
     def add(self, model: Model) -> None:
         pass
 

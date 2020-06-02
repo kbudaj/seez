@@ -137,6 +137,16 @@ class SqlAlchemyModelRepository(ModelRepository):
     def get_all_active(self) -> List[Model]:
         return list(self.session.query(Model).filter(is_(Model.active, True)).all())
 
+    @does_not_exist_error(ModelDoesNotExist)
+    def get_by_name_and_make(self, name: ModelName, make: MakeName) -> Model:
+        return (
+            self.session.query(Model)
+            .join(Make, Model.make_pk == Make.pk)
+            .filter(func.lower(Model.name) == func.lower(name))
+            .filter(func.lower(Make.name) == func.lower(make))
+            .one()
+        )
+
     def add(self, model: Model) -> None:
         self.session.add(model)
         self.session.flush()

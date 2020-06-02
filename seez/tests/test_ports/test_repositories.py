@@ -129,6 +129,20 @@ class TestModelsRepository:
         result = model_repository.get_all_active()
         assert_that(result).contains_only(*active_models)
 
+    def test_get_by_name_and_make(self, model_factory, make_factory, model_repository):
+        make = make_factory(name="Mercedes")
+        model = model_factory(name="CLS", make=make)
+        result = model_repository.get_by_name_and_make(name=model.name, make=make.name)
+        assert_that(result).is_equal_to(model)
+
+    def test_get_by_name_and_make_error(
+        self, model_factory, make_factory, model_repository
+    ):
+        make = make_factory(name="Mercedes")
+        model_factory(name="CLS", make=make)
+        with pytest.raises(ModelDoesNotExist):
+            model_repository.get_by_name_and_make(name="CLA", make=make.name)
+
     def test_add(self, model_factory, model_repository, make_factory):
         make = make_factory()
         model_1, model_2 = model_factory.build_batch(2, make_pk=make.pk)
