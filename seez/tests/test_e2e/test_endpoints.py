@@ -64,7 +64,7 @@ def test_get_models(make_factory, model_factory, api_client):
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow(),
     )
-    model_1 = model_factory(
+    model_factory(
         pk=ModelPk(UUID("2f88fa28-d8aa-4315-ad53-d05dacdcd920")),
         name="CLS",
         active=True,
@@ -72,7 +72,7 @@ def test_get_models(make_factory, model_factory, api_client):
         updated_at=datetime.utcnow(),
         make=make,
     )
-    model_2 = model_factory(
+    model_factory(
         pk=ModelPk(UUID("b8c5d732-eaf0-4c91-ab37-6af335b379d0")),
         name="CLA",
         active=True,
@@ -129,7 +129,7 @@ def test_get_submodels(api_client, model_factory, make_factory, submodel_factory
         updated_at=datetime.utcnow(),
         make=make,
     )
-    submodel_1 = submodel_factory(
+    submodel_factory(
         pk=SubModelPk(UUID("d563e365-4c36-4d7e-98c0-256befda20bf")),
         name="CLS200",
         active=True,
@@ -137,7 +137,7 @@ def test_get_submodels(api_client, model_factory, make_factory, submodel_factory
         updated_at=datetime.utcnow(),
         model=model_1,
     )
-    submodel_2 = submodel_factory(
+    submodel_factory(
         pk=SubModelPk(UUID("c7074111-b1e9-418e-be93-20d5c77011c8")),
         name="CLA500",
         active=True,
@@ -176,7 +176,7 @@ def test_get_cars(api_client, make_factory, model_factory, submodel_factory, car
     make = make_factory(name="Mercedes")
     model = model_factory(name="CLS", make=make)
     submodel = submodel_factory(name="CLS200", model=model)
-    car_1 = car_factory(
+    car_factory(
         pk=CarPk(UUID("b69e3c8c-0ea7-40f9-8141-9f5496523a85")),
         active=True,
         year=2020,
@@ -190,7 +190,7 @@ def test_get_cars(api_client, make_factory, model_factory, submodel_factory, car
         fuel_type=Car.FuelType.PETROL,
         submodel=submodel,
     )
-    car_2 = car_factory(
+    car_factory(
         pk=CarPk(UUID("bb04a84d-e3c2-4c63-8dd3-9b1401eae8ae")),
         active=True,
         year=2010,
@@ -260,7 +260,7 @@ def test_get_cars(api_client, make_factory, model_factory, submodel_factory, car
         (1000, 1000, 1000, 1000, 1000, 1000, 1),
     ],
 )
-def test_get_cars(
+def test_get_cars_filter(
     api_client,
     make_factory,
     model_factory,
@@ -277,7 +277,7 @@ def test_get_cars(
     make = make_factory(name="Mercedes")
     model = model_factory(name="CLS", make=make)
     submodel = submodel_factory(name="CLS200", model=model)
-    car = car_factory(
+    car_factory(
         pk=CarPk(UUID("b69e3c8c-0ea7-40f9-8141-9f5496523a85")),
         active=True,
         year=2020,

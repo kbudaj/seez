@@ -1,8 +1,8 @@
 """car, make, model, submodel
 
-Revision ID: 980cff00c994
+Revision ID: a2421508b2d8
 Revises:
-Create Date: 2020-06-01 21:40:28.275265
+Create Date: 2020-06-02 11:36:25.034523
 
 """
 import sqlalchemy as sa
@@ -10,7 +10,7 @@ from alembic import op
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = "980cff00c994"
+revision = "a2421508b2d8"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -26,6 +26,7 @@ def upgrade():
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("pk"),
+        sa.UniqueConstraint("name"),
     )
     op.create_index(op.f("ix_make_active"), "make", ["active"], unique=False)
     op.create_table(
