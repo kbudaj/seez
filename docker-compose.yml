@@ -1,0 +1,35 @@
+version: "3.7"
+
+services:
+  postgres:
+    container_name: seez-postgres
+    image: postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=seez
+    ports:
+      - 5432:5432
+
+  seez-api:
+    tty: true
+    stdin_open: true
+    container_name: seez-api
+    restart: unless-stopped
+    build:
+      context: seez
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    env_file:
+      - seez/.env
+    ports:
+      - 80:80
+    volumes:
+      - ./seez:/app/seez
+      - ./tasks.py:/app/tasks.py
+      - ./mypy.ini:/app/mypy.ini
+      - ./setup.cfg:/app/setup.cfg
+      - ./setup.py:/app/setup.py
+      - ./alembic.ini:/app/alembic.ini
+      - ./data:/app/data
