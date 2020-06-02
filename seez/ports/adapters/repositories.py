@@ -1,8 +1,8 @@
-from typing import List, cast
+from typing import Any, Dict, List, Optional, cast
 
 from haps import Inject, egg
 from sqlalchemy import desc
-from sqlalchemy_filters import apply_pagination
+from sqlalchemy_filters import apply_filters, apply_pagination
 
 from seez.aliases import CarPk, MakePk, ModelPk, SubModelPk
 from seez.domain.exceptions import (
@@ -33,16 +33,48 @@ class SqlAlchemyCarRepository(CarRepository):
     def get_all(self) -> List[Car]:
         return list(self.session.query(Car).all())
 
-    def get_active_paged(self, page_number: int = 1, page_size: int = 20) -> List[Car]:
+    def get_active_paged(
+        self,
+        page_number: int = 1,
+        page_size: int = 20,
+        price_min: Optional[int] = None,
+        price_max: Optional[int] = None,
+        mileage_min: Optional[int] = None,
+        mileage_max: Optional[int] = None,
+    ) -> List[Car]:
         active_cars_q = (
             self.session.query(Car)
             .filter(Car.active == True)  # noqa
             .order_by(desc(Car.updated_at))
         )
+
+        filter_spec = self._prepare_filters(
+            price_min, price_max, mileage_min, mileage_max
+        )
+        filtered_q = apply_filters(active_cars_q, filter_spec, do_auto_join=False)
+
         query, pagination = apply_pagination(
-            active_cars_q, page_number=page_number, page_size=page_size
+            filtered_q, page_number=page_number, page_size=page_size
         )
         return cast(List[Car], query.all())
+
+    def _prepare_filters(
+        self,
+        price_min: Optional[int],
+        price_max: Optional[int],
+        mileage_min: Optional[int],
+        mileage_max: Optional[int],
+    ) -> List[Dict[Any, Any]]:
+        filter_spec = []
+        if price_min is not None:
+            filter_spec.append({"field": "price", "op": ">=", "value": price_min})
+        if price_max is not None:
+            filter_spec.append({"field": "price", "op": "<=", "value": price_max})
+        if mileage_min is not None:
+            filter_spec.append({"field": "mileage", "op": ">=", "value": mileage_min})
+        if mileage_max is not None:
+            filter_spec.append({"field": "mileage", "op": "<=", "value": mileage_max})
+        return filter_spec
 
     def add(self, car: Car) -> None:
         self.session.add(car)

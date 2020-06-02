@@ -42,7 +42,15 @@ class CarRepository(Repository):
         pass
 
     @abstractmethod
-    def get_active_paged(self, page_number: int) -> List[Car]:
+    def get_active_paged(
+        self,
+        page_number: int,
+        page_size: int,
+        price_min: int,
+        price_max: int,
+        mileage_min: int,
+        mileage_max: int,
+    ) -> List[Car]:
         pass
 
     @abstractmethod

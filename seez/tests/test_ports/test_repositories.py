@@ -41,6 +41,47 @@ class TestCarRepository:
         result_3 = car_repository.get_active_paged(page_number=4, page_size=5)
         assert_that(result_3).is_length(0)
 
+    @pytest.mark.parametrize(
+        "mileage, price, q_mileage_min, q_mileage_max, q_price_min, q_price_max, result",
+        [
+            (1000, 1000, None, None, None, None, True),
+            (1000, 1000, 1000, None, None, None, True),
+            (1000, 1000, 1001, None, None, None, False),
+            (1000, 1000, 1000, 1000, None, None, True),
+            (1000, 1000, None, None, 1000, None, True),
+            (1000, 1000, None, None, 1000, 1000, True),
+            (1000, 1000, None, None, 900, 999, False),
+            (1000, 1000, None, None, None, 999, False),
+            (1000, 1000, None, None, None, 1001, True),
+            (1000, 1000, 1000, 1000, 1000, 1000, True),
+        ],
+    )
+    def test_get_active_paged_filter(
+        self,
+        car_factory,
+        car_repository,
+        mileage,
+        price,
+        q_mileage_min,
+        q_mileage_max,
+        q_price_min,
+        q_price_max,
+        result,
+    ):
+        car = car_factory(active=True, price=price, mileage=mileage)
+        result = car_repository.get_active_paged(
+            page_number=1,
+            page_size=5,
+            price_min=q_price_min,
+            price_max=q_price_max,
+            mileage_min=q_mileage_min,
+            mileage_max=q_mileage_max,
+        )
+        if result:
+            assert_that(result).contains_only(car)
+        else:
+            assert_that(result).is_empty()
+
     def test_add(self, car_factory, car_repository, submodel_factory):
         submodel = submodel_factory()
         car_1, car_2 = car_factory.build_batch(2, submodel_pk=submodel.pk)
