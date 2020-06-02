@@ -204,6 +204,17 @@ class Model(AggregateRoot):
         self.updated_at = updated_at
 
     @classmethod
+    def create_new(cls, name: ModelName, make_pk: MakePk) -> "Model":
+        return cls(
+            pk=cls.next_pk(),
+            name=name,
+            active=True,
+            make_pk=make_pk,
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow(),
+        )
+
+    @classmethod
     def next_pk(cls) -> ModelPk:
         return ModelPk(uuid4())
 
@@ -238,6 +249,17 @@ class SubModel(AggregateRoot):
         self.model_pk = model_pk
         self.created_at = created_at
         self.updated_at = updated_at
+
+    @classmethod
+    def create_new(cls, name: SubModelName, model_pk: ModelPk) -> "SubModel":
+        return cls(
+            pk=cls.next_pk(),
+            active=True,
+            name=name,
+            model_pk=model_pk,
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow(),
+        )
 
     @classmethod
     def next_pk(cls) -> SubModelPk:

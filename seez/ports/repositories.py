@@ -4,7 +4,15 @@ from typing import Any, Dict, List, Optional, Type
 from haps import base
 from sqlalchemy.orm.exc import NoResultFound
 
-from seez.aliases import CarPk, MakePk, ModelPk, SubModelPk
+from seez.aliases import (
+    CarPk,
+    MakeName,
+    MakePk,
+    ModelName,
+    ModelPk,
+    SubModelName,
+    SubModelPk,
+)
 from seez.domain.models import Car, Make, Model, SubModel
 from seez.infrastructure.exceptions import DoesNotExistError
 from seez.infrastructure.repositories import Repository
@@ -77,6 +85,10 @@ class MakeRepository(Repository):
         pass
 
     @abstractmethod
+    def get_by_name(self, name: MakeName) -> Make:
+        pass
+
+    @abstractmethod
     def add(self, make: Make) -> None:
         pass
 
@@ -120,6 +132,12 @@ class SubModelRepository(Repository):
 
     @abstractmethod
     def get_all_active(self) -> List[SubModel]:
+        pass
+
+    @abstractmethod
+    def get_by_name_model_and_make(
+        self, name: SubModelName, make: MakeName, model: ModelName
+    ) -> SubModel:
         pass
 
     @abstractmethod

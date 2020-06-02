@@ -148,3 +148,16 @@ class SubModelListDTO(DTO):
         for submodel in submodels:
             submodel_dtos.append(SubModelDTO.from_model(submodel))
         return cls(values=submodel_dtos)
+
+
+class AddCarDTO(DTO):
+    year: Year
+    mileage: Mileage
+    price: Price
+    exterior_color: Color
+    body_type: Car.BodyType
+    transmission: Car.Transmission
+    fuel_type: Car.FuelType
+    submodel: SubModelName
+    model: ModelName
+    make: MakeName

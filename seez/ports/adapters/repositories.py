@@ -1,10 +1,19 @@
 from typing import Any, Dict, List, Optional, cast
 
 from haps import Inject, egg
-from sqlalchemy import desc
+from sqlalchemy import desc, func
+from sqlalchemy.sql.operators import is_
 from sqlalchemy_filters import apply_filters, apply_pagination
 
-from seez.aliases import CarPk, MakePk, ModelPk, SubModelPk
+from seez.aliases import (
+    CarPk,
+    MakeName,
+    MakePk,
+    ModelName,
+    ModelPk,
+    SubModelName,
+    SubModelPk,
+)
 from seez.domain.exceptions import (
     CarDoesNotExist,
     MakeDoesNotExist,
@@ -44,7 +53,7 @@ class SqlAlchemyCarRepository(CarRepository):
     ) -> List[Car]:
         active_cars_q = (
             self.session.query(Car)
-            .filter(Car.active == True)  # noqa
+            .filter(is_(Car.active, True))
             .order_by(desc(Car.updated_at))
         )
 
@@ -96,7 +105,15 @@ class SqlAlchemyMakeRepository(MakeRepository):
         return list(self.session.query(Make).all())
 
     def get_all_active(self) -> List[Make]:
-        return list(self.session.query(Make).filter(Make.active == True).all())  # noqa
+        return list(self.session.query(Make).filter(is_(Make.active, True)).all())
+
+    @does_not_exist_error(MakeDoesNotExist)
+    def get_by_name(self, name: MakeName) -> Make:
+        return (
+            self.session.query(Make)
+            .filter(func.lower(Make.name) == func.lower(name))
+            .one()
+        )
 
     def add(self, make: Make) -> None:
         self.session.add(make)
@@ -118,7 +135,7 @@ class SqlAlchemyModelRepository(ModelRepository):
         return list(self.session.query(Model).all())
 
     def get_all_active(self) -> List[Model]:
-        return list(self.session.query(Model).filter(Model.active == True).all())  # noqa
+        return list(self.session.query(Model).filter(is_(Model.active, True)).all())
 
     def add(self, model: Model) -> None:
         self.session.add(model)
@@ -140,8 +157,20 @@ class SqlAlchemySubModelRepository(SubModelRepository):
         return list(self.session.query(SubModel).all())
 
     def get_all_active(self) -> List[SubModel]:
-        return list(
-            self.session.query(SubModel).filter(SubModel.active == True).all()  # noqa
+        return list(self.session.query(SubModel).filter(is_(SubModel.active, True)).all())
+
+    @does_not_exist_error(SubModelDoesNotExist)
+    def get_by_name_model_and_make(
+        self, name: SubModelName, make: MakeName, model: ModelName
+    ) -> SubModel:
+        return (
+            self.session.query(SubModel)
+            .join(Model, SubModel.model_pk == Model.pk)
+            .join(Make, Model.make_pk == Make.pk)
+            .filter(func.lower(SubModel.name) == func.lower(name))
+            .filter(func.lower(Model.name) == func.lower(model))
+            .filter(func.lower(Make.name) == func.lower(make))
+            .one()
         )
 
     def add(self, submodel: SubModel) -> None:

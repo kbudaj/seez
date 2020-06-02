@@ -69,7 +69,7 @@ class TestCarRepository:
         result,
     ):
         car = car_factory(active=True, price=price, mileage=mileage)
-        result = car_repository.get_active_paged(
+        r = car_repository.get_active_paged(
             page_number=1,
             page_size=5,
             price_min=q_price_min,
@@ -78,9 +78,9 @@ class TestCarRepository:
             mileage_max=q_mileage_max,
         )
         if result:
-            assert_that(result).contains_only(car)
+            assert_that(r).contains_only(car)
         else:
-            assert_that(result).is_empty()
+            assert_that(r).is_empty()
 
     def test_add(self, car_factory, car_repository, submodel_factory):
         submodel = submodel_factory()
@@ -176,6 +176,28 @@ class TestSubModelsRepository:
         result = submodel_repository.get_all_active()
         assert_that(result).contains_only(*active_submodels)
 
+    def test_get_by_name_model_and_make(
+        self, make_factory, model_factory, submodel_factory, submodel_repository
+    ):
+        make = make_factory(name="Mercedes")
+        model = model_factory(name="CLS", make=make)
+        submodel = submodel_factory(name="CLS200", model=model)
+        result = submodel_repository.get_by_name_model_and_make(
+            submodel.name, make.name, model.name
+        )
+        assert_that(result).is_equal_to(submodel)
+
+    def test_get_by_name_model_and_make_error(
+        self, make_factory, model_factory, submodel_factory, submodel_repository
+    ):
+        make = make_factory(name="Mercedes")
+        model = model_factory(name="CLS", make=make)
+        submodel_factory(name="CLS200", model=model)
+        with pytest.raises(SubModelDoesNotExist):
+            submodel_repository.get_by_name_model_and_make(
+                "CLA500", make.name, model.name
+            )
+
     def test_add(self, model_factory, submodel_repository, submodel_factory):
         model = model_factory()
         submodel_1, submodel_2 = submodel_factory.build_batch(2, model_pk=model.pk)
@@ -222,6 +244,27 @@ class TestMakeRepository:
 
         result = make_repository.get_all_active()
         assert_that(result).contains_only(*active_make)
+
+    @pytest.mark.parametrize(
+        "name, q_name, result",
+        [
+            ("Mercedes", "mercedes", True),
+            ("Mercedes", "MERCEDES", True),
+            ("Mercedes", "MMERCEDES", False),
+            ("Nissan", "nissan", True),
+            ("Nissan", "Nissan", True),
+            ("Nissan", "NissaN", True),
+            ("Nissan", "Nisan", False),
+        ],
+    )
+    def test_get_by_name(self, make_repository, make_factory, name, q_name, result):
+        make = make_factory(name=name)
+        if result:
+            r = make_repository.get_by_name(name=q_name)
+            assert_that(r).is_equal_to(make)
+        else:
+            with pytest.raises(MakeDoesNotExist):
+                make_repository.get_by_name(name=q_name)
 
     def test_add(self, make_factory, make_repository):
         make_1, make_2 = make_factory.build_batch(2)

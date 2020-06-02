@@ -34,7 +34,7 @@ MAKE_TABLE = Table(
     "make",
     METADATA,
     Column("pk", UUID(as_uuid=True), primary_key=True),
-    Column("name", Text, nullable=False),
+    Column("name", Text, nullable=False, unique=True),
     Column("active", Boolean, nullable=False, default=True, index=True),
     Column("created_at", DateTime, nullable=False, default=datetime.utcnow),
     Column("updated_at", DateTime, nullable=False, default=datetime.utcnow),
