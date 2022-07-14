@@ -5,27 +5,27 @@ cd seez-feat-initial
 # Build and start docker environment
 docker-compose up
 
-# seez-postgres and seez-api should be running now
-# On different terminal connect to seez-api
+## seez-postgres and seez-api should be running now
+## On different terminal connect to seez-api
 docker exec -it seez-api bash
 
-# In entry point folder (/app/seez) run migration
+## In entry point folder (/app/seez) run migration
 alembic upgrade head
 
-# After successfull migration, import data
+## After successfull migration, import data
 python manage.py import_data
 
-# API should be ready now, but let's run tests to make sure everything is okay
-# Go one directory up
+## API should be ready now, but let's run tests to make sure everything is okay
+## Go one directory up
 cd ..
 
-# Run tests
+## Run tests
 py.test -vv
 
-# Test validates code style, imports with flake8
-# It also validates correct type annotation with mypy.
-# Mypy first run might take a couple of seconds.
-# Next text executions use cache
+Test validates code style, imports with flake8
+It also validates correct type annotation with mypy.
+Mypy first run might take a couple of seconds.
+Next text executions use cache
 
 
 # API
